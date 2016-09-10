@@ -1,0 +1,2 @@
+describe CurrentPrice do
+end
