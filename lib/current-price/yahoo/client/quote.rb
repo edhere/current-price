@@ -2,11 +2,14 @@ module CurrentPrice
   module Yahoo
     class Client
       module Quote
-        
+
         def quote(ticker)
+          url = 'https://query.yahooapis.com/v1/public/yql?q='
+          url += URI.encode("SELECT * FROM yahoo.finance.quotes WHERE symbol IN ('#{ticker}')")
+          url += '&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback='
           quote_serializer(
             request(
-              "http://download.finance.yahoo.com/d/quotes.csv?s=#{ticker}&f=json"
+              url
             )
           )
         end
@@ -14,13 +17,11 @@ module CurrentPrice
         private
 
         def quote_serializer(data)
-          chunks = data.split(",")
-          {
-            :low => chunks[0],
-            :ticker => chunks[1].gsub(/"/, ''),
-            :price => chunks[2].to_f,
-            :name => chunks[3].strip.gsub(/"/, '')
-          }
+          Hash[
+            JSON.parse(data).fetch('query')['results']['quote'].map{ |key, val|
+              [underscore(key), val]
+            }
+          ]
         end
 
       end

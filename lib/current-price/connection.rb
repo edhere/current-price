@@ -12,6 +12,7 @@ module CurrentPrice
       begin
         self.class.get(url).response.body
       rescue
+        
       end
     end
 

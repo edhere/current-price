@@ -15,22 +15,23 @@ module CurrentPrice
         private
 
         def option_chain_serializer(ticker, data)
-          chunks = eval(data.to_s)
-          Hash[chunks[:expirations].map {|expiration_event|
-            month, day, year = expiration_event[:m], expiration_event[:d], expiration_event[:y]
-            ["#{month}-#{day}-#{year}", option_chain_detail_serializer(
-              request(
-                "http://www.google.com/finance/option_chain?q=#{ticker}&expd=#{day}&expm=#{month}&expy=#{year}&output=json"
-              )
-            )]
-          }]
+          Hash[
+            eval(data.to_s).fetch(:expirations).map{ |expiry|
+              month, day, year = expiry[:m], expiry[:d], expiry[:y]
+              ["#{month}-#{day}-#{year}", option_chain_detail_serializer(
+                request(
+                  "http://www.google.com/finance/option_chain?q=#{ticker}&expd=#{day}&expm=#{month}&expy=#{year}&output=json"
+                )
+              )]
+            }
+          ]
         end
 
         def option_chain_detail_serializer(data)
-          chunks = eval(data.to_s)
+          data_hash = eval(data.to_s)
           {
-            :puts => contracts_serialzer( chunks[:puts] ),
-            :calls => contracts_serialzer( chunks[:calls] )
+            :puts => contracts_serialzer( data_hash.fetch(:puts) ),
+            :calls => contracts_serialzer( data_hash.fetch(:calls) )
           }
         end
 

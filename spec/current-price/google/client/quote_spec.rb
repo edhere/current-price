@@ -6,5 +6,8 @@ describe CurrentPrice::Google::Client::Quote do
       @quote = @client.quote("CSCO")
     end
 
+    it 'should retrieve cisco quote' do
+    end
+
   end
 end
