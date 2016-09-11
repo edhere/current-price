@@ -19,7 +19,7 @@ module CurrentPrice
         def quote_serializer(data)
           Hash[
             JSON.parse(data).fetch('query')['results']['quote'].map{ |key, val|
-              [underscore(key), val]
+              [underscore(key).to_sym, val]
             }
           ]
         end

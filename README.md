@@ -40,7 +40,7 @@ require 'current-price'
 
 client = CurrentPrice::Yahoo.client(:requesting_handle => "my_handle")
 
-client.quote("CSCO") #=> {:low=>"22.46", :ticker=>"CSCO", :price=>31.14, :name=>"Cisco Systems"}
+client.quote("CSCO") #=> {:symbol=>"CSCO", :ask=>"30.79", :average_daily_volume=>"23197400", :bid=>"30.60", ..
 ```
 
 ## Contributing
